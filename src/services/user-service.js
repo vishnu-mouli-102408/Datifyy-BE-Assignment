@@ -3,7 +3,7 @@ const UserRepository = require("../repository/user-repository");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-const { JWT_SECRET } = require("../config/serverConfig");
+const { JWT_SECRET, SALT } = require("../config/serverConfig");
 
 class UserService {
   constructor() {
@@ -86,6 +86,30 @@ class UserService {
       return user.id;
     } catch (error) {
       console.log("Something went wrong in User Authentication");
+      throw error;
+    }
+  }
+
+  async updateUser(userId, data) {
+    try {
+      if (data.password) {
+        const encryptedPassword = bcrypt.hashSync(data.password, SALT);
+        data.password = encryptedPassword;
+      }
+      const response = await this.userRepository.updateUser(userId, data);
+      return response;
+    } catch (error) {
+      console.log("Something went wrong in getting USer");
+      throw error;
+    }
+  }
+
+  async destroyUser(userId) {
+    try {
+      const response = await this.userRepository.destroyUser(userId);
+      return response;
+    } catch (error) {
+      console.log("Something went wrong in getting USer");
       throw error;
     }
   }

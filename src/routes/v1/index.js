@@ -13,5 +13,15 @@ router.get(
   UserController.getUser
 );
 router.get("/isAuthenticated", UserController.isAuthenticated);
+router.patch(
+  "/user/:id",
+  AuthValidators.validateUpdateUserRequest,
+  UserController.update
+);
+router.delete(
+  "/user/:id",
+  AuthValidators.validateIsGetUserRequest,
+  UserController.destroy
+);
 
 module.exports = router;

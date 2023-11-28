@@ -31,6 +31,21 @@ class UserRepository {
     }
   }
 
+  async updateUser(userId, data) {
+    try {
+      const response = await User.update(data, {
+        where: {
+          id: userId,
+        },
+        returning: true,
+      });
+      return response;
+    } catch (error) {
+      console.log("Something went wrong in Repository Layer");
+      throw error;
+    }
+  }
+
   async getById(userId) {
     try {
       const user = await User.findByPk(userId, {

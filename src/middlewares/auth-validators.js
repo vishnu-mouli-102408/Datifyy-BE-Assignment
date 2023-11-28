@@ -22,7 +22,20 @@ const validateIsGetUserRequest = async (req, res, next) => {
   next();
 };
 
+const validateUpdateUserRequest = async (req, res, next) => {
+  if (!req.body) {
+    return res.status(400).json({
+      data: {},
+      success: false,
+      message: "Something went wrong",
+      err: "Cannot Update User",
+    });
+  }
+  next();
+};
+
 module.exports = {
   validateUserAuth,
   validateIsGetUserRequest,
+  validateUpdateUserRequest,
 };

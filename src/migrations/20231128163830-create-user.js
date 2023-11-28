@@ -21,7 +21,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
         validate: {
-          len: [4, 12],
+          min: 5,
         },
       },
       username: {
