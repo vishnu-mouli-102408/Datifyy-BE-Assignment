@@ -4,6 +4,7 @@ const router = express.Router();
 
 const UserController = require("../../controllers/user-controller");
 const { AuthValidators } = require("../../middlewares/index");
+const limiter = require("../../utils/rateLimiter");
 
 router.post("/signup", AuthValidators.validateUserAuth, UserController.create);
 router.post("/signin", AuthValidators.validateUserAuth, UserController.signIn);
@@ -12,7 +13,7 @@ router.get(
   AuthValidators.validateIsGetUserRequest,
   UserController.getUser
 );
-router.get("/isAuthenticated", UserController.isAuthenticated);
+router.get("/isAuthenticated", limiter, UserController.isAuthenticated);
 router.patch(
   "/user/:id",
   AuthValidators.validateUpdateUserRequest,
