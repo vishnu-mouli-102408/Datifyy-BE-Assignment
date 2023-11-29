@@ -29,7 +29,7 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {
-          min: 5,
+          len: [5, 100],
         },
       },
       username: {

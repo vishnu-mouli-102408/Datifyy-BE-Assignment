@@ -1,5 +1,7 @@
 const { User } = require("../models/index");
 const ClientErrors = require("../utils/client-error");
+const supabase = require("../utils/supabase");
+const UniqueConstraintsError = require("../utils/unique-constraints-error");
 const ValidationErrors = require("../utils/validation-error");
 const { StatusCodes } = require("http-status-codes");
 
@@ -7,10 +9,14 @@ class UserRepository {
   async createUser(data) {
     try {
       const user = await User.create(data);
+      // const user = await supabase.from("Users").insert(data).select();
       return user;
     } catch (error) {
       if (error.name == "SequelizeValidationError") {
         throw new ValidationErrors(error);
+      }
+      if (error.name == "SequelizeUniqueConstraintError") {
+        throw new UniqueConstraintsError(error);
       }
       console.log("Something went wrong in Repository Layer");
       throw error;
@@ -24,6 +30,7 @@ class UserRepository {
           id: userId,
         },
       });
+      // await supabase.from("Users").delete().eq("id", userId);
       return true;
     } catch (error) {
       console.log("Something went wrong in Repository Layer");
@@ -39,6 +46,10 @@ class UserRepository {
         },
         returning: true,
       });
+      // const response = await supabase
+      //   .from("Users")
+      //   .update(data)
+      //   .eq("id", userId);
       return response;
     } catch (error) {
       console.log("Something went wrong in Repository Layer");
@@ -51,6 +62,7 @@ class UserRepository {
       const user = await User.findByPk(userId, {
         attributes: ["email", "id"],
       });
+      // const user = await supabase.from("Users").select("*").eq("id", userId);
       return user;
     } catch (error) {
       console.log("Something went wrong in Repository Layer");
@@ -65,6 +77,10 @@ class UserRepository {
           email: userEmail,
         },
       });
+      // const response = await supabase
+      //   .from("Users")
+      //   .select("*")
+      //   .eq("email", userEmail);
       if (!response) {
         throw new ClientErrors(
           "AttributeNotFound",

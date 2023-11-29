@@ -11,7 +11,7 @@ const create = async (req, res) => {
       username: req.body.username,
     });
     return res.status(StatusCodes.CREATED).json({
-      data: response,
+      data: response.data,
       success: true,
       message: "Successfully created User",
       err: {},

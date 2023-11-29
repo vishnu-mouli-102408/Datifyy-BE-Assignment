@@ -18,6 +18,9 @@ class UserService {
       if (error.name == "SequelizeValidationError") {
         throw error;
       }
+      if (error.name == "SequelizeUniqueConstraintError") {
+        throw error;
+      }
       console.log("Something went wrong in Service Layer");
       throw error;
     }
